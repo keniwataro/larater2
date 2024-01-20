@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\FollowController;
+use App\Http\Controllers\SearchController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,11 +31,15 @@ Route::get('/dashboard', function () {
 // ツイート関連の処理
 Route::middleware('auth')->group(function () {
 
-    // タイムラインルート
+    // タイムラインルート（これが上に来ていないとresourceのやつにぶつかる）
     Route::get('/tweet/timeline', [TweetController::class, 'timeline'])->name('tweet.timeline');
 
+    // 検索用ルート（これが上に来ていないとresourceのやつにぶつかる）
+    Route::get('/tweet/search/input', [SearchController::class, 'create'])->name('search.input');
+    Route::get('/tweet/search/result', [SearchController::class, 'index'])->name('search.result');
+    
+    //マイページ 
     Route::get('/tweet/mypage', [TweetController::class, 'mydata'])->name('tweet.mypage');
-    Route::resource('tweet', TweetController::class);
 
     // お気に入り登録用
     Route::post('tweet/{tweet}/favorites', [FavoriteController::class, 'store'])->name('favorites');
@@ -47,18 +52,18 @@ Route::middleware('auth')->group(function () {
     // ユーザーページルート
     Route::get('user/{user}', [FollowController::class, 'show'])->name('follow.show');
 
+    // ツイート処理まとめ（まとめ処理は一番後ろにもっていってた方が無難）
+    Route::resource('tweet', TweetController::class);
 });
 
 
 
-// 認証したら行う処理一覧
+// 認証したら行う処理一覧（元からあるやつ）
 Route::middleware('auth')->group(function () {
     // プロフィール編集用
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-
-
 
 });
 
