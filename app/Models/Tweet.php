@@ -28,4 +28,9 @@ class Tweet extends Model
         return $this->belongsTo(User::class);
     }
 
+    // 中間テーブル用関数
+    public function users()
+    {
+        return $this->belongsToMany(User::class)->withTimestamps();
+    }
 }

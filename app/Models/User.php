@@ -48,4 +48,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tweet::class);
     }
+
+    // 中間テーブル用関数
+    public function tweets()
+    {
+        return $this->belongsToMany(Tweet::class)->withTimestamps();
+    }
 }
