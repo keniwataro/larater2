@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Tweet;
+use App\Models\User;
 
 class TweetController extends Controller
 {
@@ -103,5 +104,16 @@ class TweetController extends Controller
     {
         $result = Tweet::find($id)->delete();
         return redirect()->route('tweet.index');
+    }
+
+    // Userモデルに定義したリレーションを使用してデータを取得する．
+    public function mydata()
+    {
+        $tweets = User::query()
+        ->find(Auth::user()->id)
+        ->userTweets()
+        ->orderBy('created_at','desc')
+        ->get();
+        return response()->view('tweet.index', compact('tweets'));
     }
 }

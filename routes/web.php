@@ -27,6 +27,7 @@ Route::get('/dashboard', function () {
 
 // ツイート関連の処理
 Route::middleware('auth')->group(function () {
+    Route::get('/tweet/mypage', [TweetController::class, 'mydata'])->name('tweet.mypage');
     Route::resource('tweet', TweetController::class);
 });
 
@@ -41,4 +42,6 @@ Route::middleware('auth')->group(function () {
 
 });
 
+
+// 認証用まとめルートファイル
 require __DIR__.'/auth.php';

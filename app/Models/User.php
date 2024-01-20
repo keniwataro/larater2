@@ -13,7 +13,7 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
-     * The attributes that are mass assignable.
+     * 一括割り当て可能な属性。
      *
      * @var array<int, string>
      */
@@ -24,7 +24,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be hidden for serialization.
+     * シリアル化のために非表示にする必要がある属性。
      *
      * @var array<int, string>
      */
@@ -34,7 +34,7 @@ class User extends Authenticatable
     ];
 
     /**
-     * The attributes that should be cast.
+     * キャストする必要がある属性。
      *
      * @var array<string, string>
      */
@@ -42,4 +42,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // ツイートテーブルと連携させるために必要
+    public function userTweets()
+    {
+        return $this->hasMany(Tweet::class);
+    }
 }
