@@ -26,7 +26,9 @@ Route::get('/dashboard', function () {
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 // ツイート関連の処理
-Route::resource('tweet', TweetController::class);
+Route::middleware('auth')->group(function () {
+    Route::resource('tweet', TweetController::class);
+});
 
 // 認証したら行う処理一覧
 Route::middleware('auth')->group(function () {
