@@ -16,9 +16,16 @@ class Tweet extends Model
         'updated_at',
     ];
 
+    // 降順で全情報を取得する
     public static function getAllOrderByUpdated_at()
     {
         return self::orderBy('updated_at', 'desc')->get();
+    }
+
+    // ユーザーテーブルと連携させる関数
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 
 }
