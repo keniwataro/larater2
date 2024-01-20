@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TweetController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\FollowController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,6 +29,10 @@ Route::get('/dashboard', function () {
 
 // ツイート関連の処理
 Route::middleware('auth')->group(function () {
+
+    // タイムラインルート
+    Route::get('/tweet/timeline', [TweetController::class, 'timeline'])->name('tweet.timeline');
+
     Route::get('/tweet/mypage', [TweetController::class, 'mydata'])->name('tweet.mypage');
     Route::resource('tweet', TweetController::class);
 
@@ -35,7 +40,16 @@ Route::middleware('auth')->group(function () {
     Route::post('tweet/{tweet}/favorites', [FavoriteController::class, 'store'])->name('favorites');
     Route::post('tweet/{tweet}/unfavorites', [FavoriteController::class, 'destroy'])->name('unfavorites');
 
+    // フォロー用ルート
+    Route::post('user/{user}/follow', [FollowController::class, 'store'])->name('follow');
+    Route::post('user/{user}/unfollow', [FollowController::class, 'destroy'])->name('unfollow');
+
+    // ユーザーページルート
+    Route::get('user/{user}', [FollowController::class, 'show'])->name('follow.show');
+
 });
+
+
 
 // 認証したら行う処理一覧
 Route::middleware('auth')->group(function () {

@@ -116,4 +116,21 @@ class TweetController extends Controller
         ->get();
         return response()->view('tweet.index', compact('tweets'));
     }
+
+
+    // タイムライン用関数
+    public function timeline()
+    {
+        // フォローしているユーザを取得する
+        $followings = User::find(Auth::id())->followings->pluck('id')->all();
+
+        // 自分とフォローしている人が投稿したツイートを取得する
+        $tweets = Tweet::query()
+            ->where('user_id', Auth::id())
+            ->orWhereIn('user_id', $followings)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+            return response()->view('tweet.index', compact('tweets'));
+    }
 }
